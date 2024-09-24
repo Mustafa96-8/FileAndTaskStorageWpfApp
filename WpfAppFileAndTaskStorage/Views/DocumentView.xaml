@@ -1,0 +1,66 @@
+﻿<Window x:Class="WpfAppFileAndTaskStorage.Views.DocumentView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfAppFileAndTaskStorage.Views" 
+        xmlns:viewmodels="clr-namespace:WpfAppFileAndTaskStorage.ViewModels" 
+        d:DataContext="{d:DesignInstance Type=viewmodels:DocumentViewModel}"
+        mc:Ignorable="d"
+        Title="DocumnetView" 
+        Height="450" 
+        Width="800" 
+        FontSize="20"
+        Name="DocumentWindow">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid Margin="10" >
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="35*"/>
+                <ColumnDefinition Width="65*"/>
+            </Grid.ColumnDefinitions>
+            
+            <TextBlock Margin="10" Text="Идентификатор:" />
+            <TextBox Grid.Column="1" 
+                     BorderThickness="2"  
+                     Margin="5" 
+                     Text="{Binding Mode=OneWay, Path= Document.Id }"/>
+
+            <TextBlock Grid.Row="1" Margin="10" Text="Наименование:"/>
+            <TextBox Grid.Row="1" 
+                     Grid.Column="1" 
+                     BorderThickness="2" 
+                     Margin="5" 
+                     Text="{Binding Mode=OneWay, Path= Document.Name}"/>
+
+            <TextBlock Grid.Row="2" Margin="10" Text="Цифровая подпись:"/>
+            <Grid Grid.Row="2" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="60*" MinWidth="200"/>
+                    <ColumnDefinition Width="40*"/>
+                </Grid.ColumnDefinitions>
+                <TextBox BorderThickness="2" 
+                         Margin="5" Text="{Binding Mode=OneWay, Path= DigitalSignature}"/>
+                <Button Grid.Column="1" 
+                        Margin="5" 
+                        Content="Подписать" 
+                        IsEnabled="{Binding IsDigitalSignatureNull}" 
+                        Command="{Binding CreateDigitalSignatureCommand}" />
+            </Grid>
+            
+        </Grid>
+        <TextBlock Margin="5"  
+                   Grid.Row="1" 
+                   Text="{Binding Mode=TwoWay, Path= Document.Body}" 
+                   FontSize="20"/>
+    </Grid>
+</Window>
