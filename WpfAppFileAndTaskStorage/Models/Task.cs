@@ -2,7 +2,7 @@
 
 namespace WpfAppFileAndTaskStorage.Models
 {
-    public class Task
+    public class Task : BaseModel
     {
         private Task(int id, string name, string body, TaskStatus status)
         {
@@ -11,12 +11,6 @@ namespace WpfAppFileAndTaskStorage.Models
             Body = body;
             Status = status;
         }
-
-        public int Id { get; private set; }
-
-        public string Name { get; private set; }
-
-        public string Body { get; private set; }
 
         public TaskStatus Status { get; private set; }
         

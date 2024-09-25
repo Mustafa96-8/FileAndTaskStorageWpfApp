@@ -33,18 +33,34 @@ namespace WpfAppFileAndTaskStorage.ViewModels
             get => _digitalSignature;
             set => SetProperty(ref _digitalSignature, value);
         }
-        
+
+        private string _body;
+
+        public string Body
+        {
+            get => _body;
+            set {
+                SetProperty(ref _body, value);
+                Document.SetBody(value);    
+            } 
+        }
+
+
+
 
         public DocumentViewModel(Document document)
         {
             
             Document = document;
-            IsDigitalSignatureNull = Document.DigitalSignature == null;
-            DigitalSignature = Document.DigitalSignature;
+            Body = document.Body;
+            IsDigitalSignatureNull = document.DigitalSignature == null;
+            DigitalSignature = document.DigitalSignature;
+
             CloseWindowCommand = new RelayCommand(execute => CloseWindow(this), canExecute => true);
             CreateDigitalSignatureCommand = new RelayCommand(execute => CreateDigitalSignature(),canExecute => true);
 
         }
+
 
         private void CloseWindow(object parameter)
         {
@@ -53,6 +69,8 @@ namespace WpfAppFileAndTaskStorage.ViewModels
                 window.Close();
             }
         }
+
+
 
         private void CreateDigitalSignature()
         {

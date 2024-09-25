@@ -2,7 +2,7 @@
 
 namespace WpfAppFileAndTaskStorage.Models
 {
-    public class Document
+    public class Document : BaseModel
     {
         private Document(int id, string name, string body, Guid? digitalSignature)
         {
@@ -12,31 +12,28 @@ namespace WpfAppFileAndTaskStorage.Models
             DigitalSignature = digitalSignature;
         }
 
-        public int Id { get; private set; }
-
-        public string Name { get; private set; }
-
-        public string Body { get; private set; }
-
         public Guid? DigitalSignature {  get; private set; }
 
 
 
 
+        //Должна ли быть функция в модели или должна находится в вью модел???
+        //Если в модели то как указать что показание обновилось???
+        //Если в вьюмодел то нужно сделать сеттер для свойств
         public void CreateDigitalSignature()
         {
-            DigitalSignature = Guid.NewGuid();
+            this.DigitalSignature = Guid.NewGuid();
         }
 
         /// <summary>
-        /// Simple document factory
+        /// Простая фабрика для создания нового экземпляра Документа
         /// </summary>
-        /// <param name="id">Documnet inuque number</param>
-        /// <param name="name">Document name</param>
-        /// <param name="body">Document body</param>
-        /// <param name="digitalSignature">Digital sign can be null if document not signed</param>
-        /// <returns>Return new Document if params are valid, else throw Exception</returns>
-        /// <exception cref="ArgumentException">If params are not valid</exception>
+        /// <param name="id">Идентификатор документа</param>
+        /// <param name="name">Название документа</param>
+        /// <param name="body">Тело документа</param>
+        /// <param name="digitalSignature">Цифровая подпись документа, если её нет принимает значение null</param>
+        /// <returns>Возвращает созданный экземпляр документа, если все параметры прошли валидацию, иначе выкидывает ошибку</returns>
+        /// <exception cref="ArgumentException">Если параметр не проходит проверку на допустимость</exception>
         public static Document Create(int id, string name, string body, Guid? digitalSignature = null)
         {
             if(id < 0)
