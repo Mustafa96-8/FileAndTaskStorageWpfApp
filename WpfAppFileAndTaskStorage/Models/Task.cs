@@ -14,10 +14,15 @@ namespace WpfAppFileAndTaskStorage.Models
 
         public TaskStatus Status { get; private set; }
         
-
-        public static Task Create(int id,string name,string body, TaskStatus status)
+        public void SetStatus(TaskStatus status)
         {
-            if (id == 0)
+            this.Status = status;
+        }
+
+
+        public static Task Create(int id,string name,string body, TaskStatus status = TaskStatus.AtWork)
+        {
+            if (id <= 0)
             {
                 throw new ArgumentException($"{nameof(id)} is not valid");
             }
