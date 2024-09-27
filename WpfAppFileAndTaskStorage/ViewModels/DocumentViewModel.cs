@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using WpfAppFileAndTaskStorage.Models;
@@ -12,53 +8,87 @@ namespace WpfAppFileAndTaskStorage.ViewModels
 {
     public class DocumentViewModel :BaseViewModel
     {
+
+
+        #region Поля и свойства
         public Document Document { get; set; }
 
         public ICommand CloseWindowCommand { get; private set; }
         public ICommand CreateDigitalSignatureCommand { get; private set; }
+        
 
-
-        private bool _isDigitalSignatureNull;
-
+        private bool isDigitalSignatureNull;
         public bool IsDigitalSignatureNull
         {
-            get => _isDigitalSignatureNull;
-            set => SetProperty(ref _isDigitalSignatureNull, value);
+            get => isDigitalSignatureNull;
+            set
+            {
+                SetProperty(ref isDigitalSignatureNull, value);
+                CanDocumentChange = !value;
+            }
         }
-        
-        private Guid? _digitalSignature;
 
+        private bool canDocumentChange;
+        public bool CanDocumentChange 
+        { 
+            get => canDocumentChange;
+            set => SetProperty(ref canDocumentChange, value);
+        }
+
+
+
+        private Guid? digitalSignature;
         public Guid? DigitalSignature
         {
-            get => _digitalSignature;
-            set => SetProperty(ref _digitalSignature, value);
+            get => digitalSignature;
+            set => SetProperty(ref digitalSignature, value);
         }
 
-        private string _body;
+
+        private string name;
+        public string Name
+        {
+            get => name;
+            set
+            {
+                SetProperty(ref name, value);
+                Document.SetName(value);
+            }
+        }
+
+        private string body;
 
         public string Body
         {
-            get => _body;
+            get => body;
             set {
-                SetProperty(ref _body, value);
+                SetProperty(ref body, value);
                 Document.SetBody(value);    
             } 
         }
 
+        public string TypeName => "Документ";
 
+        #endregion
 
 
         public DocumentViewModel(Document document)
         {
+            InitDataFromModel(document);
             
-            Document = document;
-            Body = document.Body;
-            IsDigitalSignatureNull = document.DigitalSignature == null;
-            DigitalSignature = document.DigitalSignature;
-
             CloseWindowCommand = new RelayCommand(execute => CloseWindow(this), canExecute => true);
             CreateDigitalSignatureCommand = new RelayCommand(execute => CreateDigitalSignature(),canExecute => true);
+        }
 
+
+        
+        private void InitDataFromModel(Document document) 
+        {
+            this.Document = document;
+            this.body = document.Body;
+            this.name = document.Name;
+            this.IsDigitalSignatureNull = document.DigitalSignature == null;
+            this.DigitalSignature = document.DigitalSignature;
         }
 
 
@@ -67,7 +97,7 @@ namespace WpfAppFileAndTaskStorage.ViewModels
             if (parameter is Window window) 
             {
                 window.Close();
-            }
+            }     
         }
 
 
@@ -77,13 +107,12 @@ namespace WpfAppFileAndTaskStorage.ViewModels
             if (Document.DigitalSignature==null)
             {
                 Document.CreateDigitalSignature();
-                IsDigitalSignatureNull = false;
-                DigitalSignature = Document.DigitalSignature;
+                this.IsDigitalSignatureNull = false;
+                this.DigitalSignature = Document.DigitalSignature;
             }
             else
             {
-                /*throw new Exception($"Create a new digital signature for a document with an existing signature on {Document}.");*/
-                return;
+                throw new Exception($"Create a new digital signature for a document with an existing signature on {Document}.");
 
             }
         }
