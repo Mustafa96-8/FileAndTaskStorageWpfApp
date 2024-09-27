@@ -1,9 +1,9 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
-using System.Windows;
 using WpfAppFileAndTaskStorage.Models;
 using WpfAppFileAndTaskStorage.MVVM;
 using WpfAppFileAndTaskStorage.Views;
+using System;
 
 namespace WpfAppFileAndTaskStorage.ViewModels
 {
@@ -17,13 +17,6 @@ namespace WpfAppFileAndTaskStorage.ViewModels
 
         public ICommand OpenItemCommand { get; private set; }
 
-        private object _selectedItem;
-
-        public object SelectedItem
-        {
-            get => _selectedItem;
-            set => SetProperty(ref _selectedItem, value);
-        } 
 
 
         public MainWindowViewModel()
@@ -35,43 +28,46 @@ namespace WpfAppFileAndTaskStorage.ViewModels
             OpenItemCommand = new RelayCommand(OpenItem, OpenItemCanExecute);
 
 
-            CreateDocument(Body:"Some Text to doc without name");
-            CreateDocument("My Trucks","Mersedes \n Scania \n Volvo \n MAN \n MAZ \n ");
-            CreateDocument("Salary Report","Mark 2500 \n John 1980 \t Loid 2100 \n Kate 2150");
+            CreateDocument(body:"просто некоторый текст для документа с стандартным именем");
+            CreateDocument("Грузовики.doc","Mersedes \nScania \nVolvo \nMAN \nMAZ \nDAF");
+            CreateDocument("Отчёт.doc","Данные 1 \n Данные 2 \tпоказания \n Данные 3");
+            CreateTask("Поверить соответствие корпоративному стилю","Проверить имена и Нотации\nДобавить регионы");
+            CreateTask("Изучение методов разработки в компаниях","Изучить:\n1.Agile \n2.CI CD");
 
         }
 
 
-
-        private void CreateDocument(string Name="New Doc", string Body="-")
+        private void CreateDocument(string name="Новый документ", string body="-")
         {
-            Document newDocument = Document.Create( this.GetNewId(), Name, Body, null);
-            Items.Add(newDocument);
+            int id = this.GetNewId();
+            Document newDocument = Document.Create( id, name, body, null);
+            Items.Add(new DocumentViewModel(newDocument));
         }
 
-        private void CreateTask()
+        private void CreateTask(string name="Новая задача",string body="-")
         {
-            Task newTask = Task.Create(this.GetNewId(), "New Task", "--", TaskStatus.AtWork);
-            Items.Add(newTask);
+            int id = this.GetNewId();
+            Task newTask = Task.Create( id, name, body, TaskStatus.AtWork);
+            Items.Add(new TaskViewModel(newTask));
         }
 
         private void OpenItem(object selectedItem)
         {
-            if (selectedItem is Document document)
+            if (selectedItem is DocumentViewModel documentViewModel)
             {
-                DocumentView window = new DocumentView();
-                window.DataContext = new DocumentViewModel(document);
-
-                // Открываем окно в модальном режиме
-                window.ShowDialog();
+                DocumentView documentView = new DocumentView();
+                documentView.DataContext = documentViewModel;
+                documentView.ShowDialog();      
             }
-            else if (selectedItem is Task)
+            else if (selectedItem is TaskViewModel taskViewModel)
             {
+                TaskView taskView = new TaskView();
+                taskView.DataContext = taskViewModel;
+                taskView.ShowDialog();
 
             }
-            
-
         }
+
         private bool OpenItemCanExecute(object selectedItem)
         {
             if (selectedItem != null)
