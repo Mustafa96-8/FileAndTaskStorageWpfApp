@@ -4,10 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfAppFileAndTaskStorage"
-        xmlns:custns="clr-namespace:WpfAppFileAndTaskStorage.ViewModels"
+        xmlns:custns="clr-namespace:WpfAppFileAndTaskStorage.ViewModels" 
+        d:DataContext="{d:DesignInstance Type=custns:MainWindowViewModel}"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
         Name="ThisWindow">
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -20,40 +22,37 @@
             </Grid.ColumnDefinitions>
             <Button FontSize="18"
                     Grid.Column="0"
-                    FontStyle="Italic"
-                    Content="Create Document"
+                    Content="Создать документ"
                     Padding="10"
                     Margin="10"
                     VerticalAlignment="Top"
                     HorizontalAlignment="Stretch"
-                    Command="{Binding CreateDocumentCommand}"
-                    />
+                    Command="{Binding CreateDocumentCommand}"/>
             <Button FontSize="18"
                     Grid.Column="1"
-                    FontStyle="Italic" 
-                    Content="Create Task" 
+                    Content="Создать задачу" 
                     Padding="10"
                     Margin="10"
                     VerticalAlignment="Top"
                     HorizontalAlignment="Stretch"
-                    Command="{Binding CreateTaskCommand}"
-                    />
+                    Command="{Binding CreateTaskCommand}"/>
         </Grid>
         <Grid Margin="5" Grid.Row="1">
-            <DataGrid Name="DG1"  ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}"  AutoGenerateColumns="False" >
-                <DataGrid.Columns >
-                    <DataGridTextColumn Header="Название"  Binding="{Binding Name}" Width="40*"/>
-                    <DataGridTextColumn Header="Тип" Binding="{Binding Id}"  Width="30*"/>
+            <DataGrid FontSize="15" Name="DG1" ItemsSource="{Binding Items}" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Название" IsReadOnly="True" Binding="{Binding Name}" Width="50*"/>
+                    <DataGridTextColumn Header="Тип" IsReadOnly="True" Binding="{Binding TypeName}" Width="20*"/>
                     <DataGridTemplateColumn Header="" Width="30*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Margin="10" Content="Открыть" BorderThickness="3" CommandParameter="{Binding .}" Command="{Binding ElementName=ThisWindow, Path=DataContext.OpenItemCommand}"  />
+                                <Button Margin="2" Content="Открыть" BorderThickness="1" 
+                                        CommandParameter="{Binding .}" 
+                                        Command="{Binding ElementName=ThisWindow, Path=DataContext.OpenItemCommand}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
-            
         </Grid>
     </Grid>
 </Window>
