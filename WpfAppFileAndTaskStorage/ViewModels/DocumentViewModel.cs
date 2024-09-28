@@ -21,7 +21,6 @@ namespace WpfAppFileAndTaskStorage.ViewModels
         /// Команда для создания цифровой подписи документа.
         /// </summary>
         public ICommand CreateDigitalSignatureCommand { get; private set; }
-        
 
         private bool isDigitalSignatureNull;
         
@@ -54,7 +53,7 @@ namespace WpfAppFileAndTaskStorage.ViewModels
         private Guid? digitalSignature;
 
         /// <summary>
-        /// Цифровая подпись документа. null, если подписи нет.
+        /// Цифровая подпись документа. <see langword="null">, если подписи нет.
         /// </summary>
         public Guid? DigitalSignature
         {
@@ -64,6 +63,10 @@ namespace WpfAppFileAndTaskStorage.ViewModels
 
 
         private string name;
+        
+        /// <summary>
+        /// Название документа. При изменении обновляет название в модели документа.
+        /// </summary>
         public string Name
         {
             get => name;
@@ -76,6 +79,9 @@ namespace WpfAppFileAndTaskStorage.ViewModels
 
         private string body;
 
+        /// <summary>
+        /// Содержание документа. При изменении обновляет содержание в модели документа.
+        /// </summary>
         public string Body
         {
             get => body;
@@ -86,32 +92,48 @@ namespace WpfAppFileAndTaskStorage.ViewModels
             } 
         }
 
+        /// <summary>
+        /// Строковое представление типа объекта.
+        /// </summary>
         public string TypeName => "Документ";
 
-        private bool CanCreateDigitalSignature => Document.DigitalSignature != null;
+        /// <summary>
+        /// Определяет, можно ли создать цифровую подпись. 
+        /// </summary>
+        private bool CanCreateDigitalSignature => Document.DigitalSignature == null;
 
         #endregion
 
-
-        public DocumentViewModel(Document document)
-        {
-            this.Document = document;
-            this.body = document.Body;
-            this.name = document.Name;
-            this.IsDigitalSignatureNull = document.DigitalSignature == null;
-            this.DigitalSignature = document.DigitalSignature;
-
-
-            this.CreateDigitalSignatureCommand = new RelayCommand(execute => CreateDigitalSignature(),canExecute => CanCreateDigitalSignature);
-        }
-
+        #region Методы
+        /// <summary>
+        /// Создаёт цифровую подпись для документа.
+        /// Обновляет состояние <see cref="IsDigitalSignatureNull"/> и <see cref="DigitalSignature"/> после создания подписи.
+        /// </summary>
         private void CreateDigitalSignature()
         {
             this.Document.CreateDigitalSignature();
             this.IsDigitalSignatureNull = false;
             this.DigitalSignature = Document.DigitalSignature;
         }
+        #endregion
 
+        #region Конструктор
+        /// <summary>
+        /// Инициалиализирует новый экземпляр класса <see cref="DocumentViewModel"/> на основе переданной модели документа.
+        /// </summary>
+        /// <param name="document">Модель документа, связанная с этой моделью представления.</param>
+        public DocumentViewModel(Document document)
+        {
+            // Инициализация полей модели представления данными из модели документов.
+            this.Document = document;
+            this.body = document.Body;
+            this.name = document.Name;
+            this.IsDigitalSignatureNull = document.DigitalSignature == null;
+            this.DigitalSignature = document.DigitalSignature;
 
+            // Привязка команд к методам-обработчикам через объект RelayCommand.
+            this.CreateDigitalSignatureCommand = new RelayCommand(execute => CreateDigitalSignature(),canExecute => CanCreateDigitalSignature);
+        }
+        #endregion
     }
 }
