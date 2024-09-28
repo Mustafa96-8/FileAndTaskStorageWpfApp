@@ -2,14 +2,14 @@
 
 namespace WpfAppFileAndTaskStorage.Models
 {
-    public class Document : BaseModel
+    public sealed class Document : BaseModel
     {
         private Document(int id, string name, string body, Guid? digitalSignature)
         {
-            Id = id;
-            Name = name;
-            Body = body;
-            DigitalSignature = digitalSignature;
+            this.Id = id;
+            this.Name = name;
+            this.Body = body;
+            this.DigitalSignature = digitalSignature;
         }
 
         public Guid? DigitalSignature {  get; private set; }
@@ -30,7 +30,7 @@ namespace WpfAppFileAndTaskStorage.Models
         /// </summary>
         /// <param name="id">Идентификатор документа</param>
         /// <param name="name">Название документа</param>
-        /// <param name="body">Тело документа</param>
+        /// <param name="body">Содержание документа</param>
         /// <param name="digitalSignature">Цифровая подпись документа, если её нет принимает значение null</param>
         /// <returns>Возвращает созданный экземпляр документа, если все параметры прошли валидацию, иначе выкидывает ошибку</returns>
         /// <exception cref="ArgumentException">Если параметр не проходит проверку на допустимость</exception>
@@ -38,9 +38,8 @@ namespace WpfAppFileAndTaskStorage.Models
         {
             if(id < 0)
             {
-                throw new ArgumentException($"{nameof(id)} is not valid");
+                throw new ArgumentException($"Не удаётся создать Документ, Параметр {nameof(id)} должен быть больше или равным 0");
             }
-
 
             return new Document(id, name, body, digitalSignature);
         }
