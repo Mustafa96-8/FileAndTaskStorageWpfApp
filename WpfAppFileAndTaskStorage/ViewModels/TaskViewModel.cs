@@ -81,22 +81,33 @@ namespace WpfAppFileAndTaskStorage.ViewModels
 
 
         #region Конструктор
-        
         /// <summary>
-        /// Инициализирует новый экземпляр класса <see cref="TaskViewModel"/> на основе переданной модели задачи.
-        /// Заполняет коллекцию возможных статусов задачи.
+        /// Конструктор для создания модели представления задачи с заданным идентификатором, именем и содержанием.
         /// </summary>
-        /// <param name="task">Модель задачи, связанная с этой моделью представления.</param>
-        public TaskViewModel(Task task)
+        /// <param name="id">Идентификатор задачи.</param>
+        /// <param name="name">Название задачи.</param>
+        /// <param name="body">Содержание задачи.</param>
+        public TaskViewModel(int id, string name, string body)
         {
+            // Инициализация полей модели представления данными из модели задачи.
+            this.Task = new Task(id);
+            this.Name = name;
+            this.Body = body;
+            this.Status = TaskStatus.AtWork; 
             // Заполнение коллекции возможных статусов задачи на основе перечисления TaskStatus.
             this.Statuses = Enum.GetValues(typeof(TaskStatus)).Cast<TaskStatus>();
 
-            // Инициализация полей модели представления данными из модели задачи.
-            this.Task = task;
-            this.Status = task.Status;
-            this.Body = task.Body;
-            this.Name = task.Name;
+        }
+        /// <summary>
+        /// Конструктор для создания модели представления задачи с заданным идентификатором.
+        /// </summary>
+        /// <param name="id">Идентификатор задачи.</param>
+        public TaskViewModel(int id)
+        {
+            // Инициализация модели задачи.
+            this.Task = new Task(id);
+            // Заполнение коллекции возможных статусов на основе перечисления TaskStatus.
+            this.Statuses = Enum.GetValues(typeof(TaskStatus)).Cast<TaskStatus>();
         }
         #endregion
     }

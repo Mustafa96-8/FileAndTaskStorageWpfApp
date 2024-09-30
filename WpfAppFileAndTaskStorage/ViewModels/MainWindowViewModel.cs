@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
-using WpfAppFileAndTaskStorage.Models;
 using WpfAppFileAndTaskStorage.MVVM;
 using WpfAppFileAndTaskStorage.Views;
 
@@ -8,7 +7,7 @@ namespace WpfAppFileAndTaskStorage.ViewModels
 {
 
     /// <summary>
-    /// Класс модели представления для главного окна представления (MainWindow).
+    /// Класс модели представления для главного окна представления.
     /// </summary>
     public class MainWindowViewModel : BaseViewModel
     {
@@ -64,7 +63,7 @@ namespace WpfAppFileAndTaskStorage.ViewModels
         /// </summary>
         private void GenerateTestData()
         {
-            CreateDocument(body: "просто некоторый текст для документа с стандартным именем");
+            CreateDocument("Новый доумент.doc","просто некоторый текст для документа с стандартным именем");
             CreateDocument("Грузовики.doc", "Mersedes \nScania \nVolvo \nMAN \nMAZ \nDAF");
             CreateDocument("Отчёт.doc", "Данные 1 \n Данные 2 \tпоказания \n Данные 3");
             CreateTask("Поверить соответствие корпоративному стилю", "Проверить имена и Нотации\nДобавить регионы");
@@ -75,36 +74,57 @@ namespace WpfAppFileAndTaskStorage.ViewModels
 
         #region События
         /// <summary>
-        /// Создаёт новый документ с параметрами и открывает его для редактирования в модальном окне.
+        /// Создаёт новый документ с параметрами.
         /// </summary>
-        /// <param name="name">Название нового документа. По умолчанию - "Новый документ"</param>
-        /// <param name="body">Содержание нового документа. По умолчанию - "-"</param>
-        private void CreateDocument(string name="Новый документ", string body="-")
+        /// <param name="name">Название нового документа.</param>
+        /// <param name="body">Содержание нового документа. По умолчанию - ""</param>
+        private void CreateDocument(string name, string body = "")
         {
             int id = this.GetNewId();
 
-            Document newDocument = Document.Create( id, name, body, null);
-            DocumentViewModel documentViewModel = new DocumentViewModel(newDocument);
-            
-            OpenItem(documentViewModel);
+            DocumentViewModel documentViewModel = new DocumentViewModel(id, name, body);
+
             Items.Add(documentViewModel);
         }
 
+        /// <summary>
+        /// Создаёт новый документ с настройкой его в модальном окне.
+        /// </summary>
+        private void CreateDocument()
+        {
+            int id = this.GetNewId();
+            DocumentViewModel documentViewModel = new DocumentViewModel(id);
+            OpenItem(documentViewModel);
+            if (documentViewModel.Name!=null)
+            {
+                Items.Add(documentViewModel);
+            }
+        }
 
         /// <summary>
-        /// Создаёт новую задачу с параметрами и открывает её для редактирования в модальном окне.
+        /// Создаёт новую задачу с параметрами.
         /// </summary>
         /// <param name="name">Название новой задачи. По умолчанию - "Новая задача"</param>
         /// <param name="body">Содержание новой задачи. По умолчанию - "-"</param>
-        private void CreateTask(string name="Новая задача",string body="-")
+        private void CreateTask(string name, string body="")
         {
             int id = this.GetNewId();
+            TaskViewModel taskViewModel = new TaskViewModel(id, name, body);
             
-            Task newTask = Task.Create( id, name, body, TaskStatus.AtWork);
-            TaskViewModel taskViewModel = new TaskViewModel(newTask);
-            
-            OpenItem(taskViewModel);
             Items.Add(taskViewModel);
+        }
+        /// <summary>
+        /// Создаёт новый документ с настройкой его в модальном окне.
+        /// </summary>
+        private void CreateTask()
+        {
+            int id = this.GetNewId();
+            TaskViewModel taskViewModel = new TaskViewModel(id);
+            OpenItem(taskViewModel);
+            if (taskViewModel.Name != null)
+            {
+                Items.Add(taskViewModel);
+            }
         }
 
         /// <summary>
@@ -115,14 +135,18 @@ namespace WpfAppFileAndTaskStorage.ViewModels
         {
             if (selectedItem is DocumentViewModel documentViewModel)
             {
-                DocumentView documentView = new DocumentView();
-                documentView.DataContext = documentViewModel;
+                DocumentView documentView = new DocumentView
+                {
+                    DataContext = documentViewModel
+                };
                 documentView.ShowDialog();      
             }
             else if (selectedItem is TaskViewModel taskViewModel)
             {
-                TaskView taskView = new TaskView();
-                taskView.DataContext = taskViewModel;
+                TaskView taskView = new TaskView
+                {
+                    DataContext = taskViewModel
+                };
                 taskView.ShowDialog();
 
             }

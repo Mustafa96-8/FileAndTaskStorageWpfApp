@@ -100,7 +100,7 @@ namespace WpfAppFileAndTaskStorage.ViewModels
         /// <summary>
         /// Определяет, можно ли создать цифровую подпись. 
         /// </summary>
-        private bool CanCreateDigitalSignature => Document.DigitalSignature == null;
+        private bool CanCreateDigitalSignature => DigitalSignature == null;
 
         #endregion
 
@@ -119,20 +119,35 @@ namespace WpfAppFileAndTaskStorage.ViewModels
 
         #region Конструктор
         /// <summary>
-        /// Инициалиализирует новый экземпляр класса <see cref="DocumentViewModel"/> на основе переданной модели документа.
+        /// Конструктор для создания модели представления документа с заданным идентификатором, именем и содержимым.
         /// </summary>
-        /// <param name="document">Модель документа, связанная с этой моделью представления.</param>
-        public DocumentViewModel(Document document)
+        /// <param name="id">Идентификатор документа.</param>
+        /// <param name="name">Название документа.</param>
+        /// <param name="body">Содержание документа.</param>
+        public DocumentViewModel(int id, string name, string body)
         {
-            // Инициализация полей модели представления данными из модели документов.
-            this.Document = document;
-            this.body = document.Body;
-            this.name = document.Name;
-            this.IsDigitalSignatureNull = document.DigitalSignature == null;
-            this.DigitalSignature = document.DigitalSignature;
+            // Инициализация модели документа.
+            this.Document = new Document(id);
+            this.body = body;
+            this.name = name;
+            this.IsDigitalSignatureNull = true; // По умолчанию цифровой подписи нет.
+            this.DigitalSignature = null;
 
-            // Привязка команд к методам-обработчикам через объект RelayCommand.
+            // Привязка команды создания цифровой подписи.
             this.CreateDigitalSignatureCommand = new RelayCommand(execute => CreateDigitalSignature(),canExecute => CanCreateDigitalSignature);
+        }
+
+        /// <summary>
+        /// Конструктор для создания модели представления документа с заданным идентификатором.
+        /// </summary>
+        /// <param name="id">Идентификатор документа.</param>
+        public DocumentViewModel(int id)
+        {
+            this.Document = new Document(id);
+            this.isDigitalSignatureNull = true;
+            this.digitalSignature = null;
+            // Привязка команды создания цифровой подписи.
+            this.CreateDigitalSignatureCommand = new RelayCommand(execute => CreateDigitalSignature(), canExecute => CanCreateDigitalSignature);
         }
         #endregion
     }
