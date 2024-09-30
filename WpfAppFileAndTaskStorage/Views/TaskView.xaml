@@ -46,8 +46,15 @@
 
             <TextBlock Grid.Row="2" Margin="10" Text="Состояние:"/>
             <Grid Grid.Row="2" Grid.Column="1" Margin="5">
-                <ComboBox ItemsSource="{Binding Statuses}" 
-                          SelectedItem="{Binding Mode=TwoWay, Path=Status }" />
+                <ComboBox ItemsSource="{Binding StatusDisplayNames}" 
+                          SelectedValue="{Binding Mode=TwoWay, Path=Status }" 
+                          SelectedValuePath="Key">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Value}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
             </Grid>
 
         </Grid>

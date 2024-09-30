@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using WpfAppFileAndTaskStorage.Enums;
+using WpfAppFileAndTaskStorage.Helpers;
 using WpfAppFileAndTaskStorage.Models;
 using WpfAppFileAndTaskStorage.MVVM;
 
@@ -12,19 +14,23 @@ namespace WpfAppFileAndTaskStorage.ViewModels
     public class TaskViewModel : BaseViewModel
     {
         #region Поля и свойства
-        public Task Task { get; set; }
-        
-        private IEnumerable<TaskStatus> statuses;
 
         /// <summary>
-        /// Коллекция возможных статусов задачи.
+        /// Модель задачи
         /// </summary>
-        public IEnumerable<TaskStatus> Statuses
+        public Task Task { get; set; }
+
+        private IEnumerable<KeyValuePair<TaskStatus, string>> statusDisplayNames;
+
+        /// <summary>
+        /// Коллекция статусов с их отображаемыми названиями.
+        /// </summary>
+        public IEnumerable<KeyValuePair<TaskStatus, string>> StatusDisplayNames
         {
-            get => statuses;  
+            get => statusDisplayNames;
             set
             {
-                SetProperty(ref statuses, value);
+                SetProperty(ref statusDisplayNames, value);
             }
         }
 
@@ -59,9 +65,9 @@ namespace WpfAppFileAndTaskStorage.ViewModels
         }
 
         private TaskStatus status;
-        
+
         /// <summary>
-        /// Текущий cтатус задачи. При изменении обновляет статус в модели задачи.
+        /// Текущий статус задачи. При изменении обновляет статус в модели задачи.
         /// </summary>
         public TaskStatus Status
         {
@@ -77,10 +83,11 @@ namespace WpfAppFileAndTaskStorage.ViewModels
         /// Строковое название типа объекта.
         /// </summary>
         public string TypeName => "Задача";
+
         #endregion
 
+        #region Конструкторы
 
-        #region Конструктор
         /// <summary>
         /// Конструктор для создания модели представления задачи с заданным идентификатором, именем и содержанием.
         /// </summary>
@@ -93,11 +100,12 @@ namespace WpfAppFileAndTaskStorage.ViewModels
             this.Task = new Task(id);
             this.Name = name;
             this.Body = body;
-            this.Status = TaskStatus.AtWork; 
-            // Заполнение коллекции возможных статусов задачи на основе перечисления TaskStatus.
-            this.Statuses = Enum.GetValues(typeof(TaskStatus)).Cast<TaskStatus>();
+            this.Status = TaskStatus.AtWork;
 
+            // Инициализация коллекции статусов с их отображаемыми названиями.
+            InitializeStatusDisplayNames();
         }
+
         /// <summary>
         /// Конструктор для создания модели представления задачи с заданным идентификатором.
         /// </summary>
@@ -106,9 +114,22 @@ namespace WpfAppFileAndTaskStorage.ViewModels
         {
             // Инициализация модели задачи.
             this.Task = new Task(id);
-            // Заполнение коллекции возможных статусов на основе перечисления TaskStatus.
-            this.Statuses = Enum.GetValues(typeof(TaskStatus)).Cast<TaskStatus>();
+
+            // Инициализация коллекции статусов с их отображаемыми названиями.
+            InitializeStatusDisplayNames();
         }
+
+        /// <summary>
+        /// Метод для инициализации коллекции статусов с их отображаемыми названиями.
+        /// </summary>
+        private void InitializeStatusDisplayNames()
+        {
+            this.StatusDisplayNames = Enum.GetValues(typeof(TaskStatus))
+                .Cast<TaskStatus>()
+                .Select(status => new KeyValuePair<TaskStatus, string>(status, TaskStatusTranslator.GetStatusDisplayName(status)))
+                .ToList();
+        }
+
         #endregion
     }
 }
