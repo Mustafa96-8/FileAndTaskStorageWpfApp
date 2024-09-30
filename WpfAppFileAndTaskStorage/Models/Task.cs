@@ -1,4 +1,5 @@
 ﻿using System;
+using WpfAppFileAndTaskStorage.Enums;
 
 namespace WpfAppFileAndTaskStorage.Models
 {
@@ -40,20 +41,5 @@ namespace WpfAppFileAndTaskStorage.Models
             this.Id = id; 
         }
         #endregion
-    }
-    /// <summary>
-    /// Перечисление, определяющее возможные статусы задачи.
-    /// </summary>
-    public enum TaskStatus
-    {
-        /// <summary>
-        /// Задача находится в работе.
-        /// </summary>
-        AtWork,
-
-        /// <summary>
-        /// Задача завершена.
-        /// </summary>
-        Completed
     }
 }
