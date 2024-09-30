@@ -57,9 +57,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Helpers\TaskStatusTranslator.cs" />
     <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Models\Document.cs" />
     <Compile Include="Models\Task.cs" />
+    <Compile Include="Enums\TaskStatus.cs" />
     <Compile Include="MVVM\BaseViewModel.cs" />
     <Compile Include="ViewModels\DocumentViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />

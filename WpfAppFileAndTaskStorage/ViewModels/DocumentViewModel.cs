@@ -53,7 +53,7 @@ namespace WpfAppFileAndTaskStorage.ViewModels
         private Guid? digitalSignature;
 
         /// <summary>
-        /// Цифровая подпись документа. <see langword="null">, если подписи нет.
+        /// Цифровая подпись документа. <see langword="null"/>, если подписи нет.
         /// </summary>
         public Guid? DigitalSignature
         {

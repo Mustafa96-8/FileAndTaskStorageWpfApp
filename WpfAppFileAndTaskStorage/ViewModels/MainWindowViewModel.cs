@@ -63,11 +63,11 @@ namespace WpfAppFileAndTaskStorage.ViewModels
         /// </summary>
         private void GenerateTestData()
         {
-            CreateDocument("Новый доумент.doc","просто некоторый текст для документа с стандартным именем");
-            CreateDocument("Грузовики.doc", "Mersedes \nScania \nVolvo \nMAN \nMAZ \nDAF");
+            CreateDocument("Первый доумент.doc","Текст Первого документа");
+            CreateDocument("Список задач.doc", "Задача 1 \nЗадача 2\nЗадача 3");
             CreateDocument("Отчёт.doc", "Данные 1 \n Данные 2 \tпоказания \n Данные 3");
-            CreateTask("Поверить соответствие корпоративному стилю", "Проверить имена и Нотации\nДобавить регионы");
-            CreateTask("Изучение методов разработки в компаниях", "Изучить:\n1.Agile \n2.CI CD");
+            CreateTask("Посмотри задачи", "Первая задача для выполнения\nВторая задача для выполнения");
+            CreateTask("Выполни заказы", "Выполнить:\n1.Первый заказ\n2.Второй заказ");
 
         }
         #endregion
